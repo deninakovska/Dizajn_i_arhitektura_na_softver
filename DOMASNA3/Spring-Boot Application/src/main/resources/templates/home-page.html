@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head class="high-contrast">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Почетна страна</title>
+    <style>
+        body {
+            background-color: #96ceaa;
+            color: white;
+            text-align: center;
+            font-family:Roboto, sans-serif;
+            margin-top: 230px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), -2px -2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        a {
+            position: relative;
+            z-index: 10;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #45a06c;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 150px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), -2px -2px 4px rgba(0, 0, 0, 0.5);
+            font-family: inherit;
+        }
+        img {
+            display: block;
+            width: 500px;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: -50px;
+        }
+        #accessibility-controls button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .high-contrast {
+            background-color: #000;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Анализа на македонска берза</h1>
+<div id="accessibility-controls">
+    <button onclick="increaseTextSize()">Зголеми текст</button>
+    <button onclick="decreaseTextSize()">Намали текст</button>
+    <button onclick="darkenWallpaper()">Висок контраст</button>
+    <button onclick="resetWallpaper()">Врати</button>
+</div>
+<br>
+<a href="/api/data"><button>ПРОДОЛЖИ</button></a>
+<img id=wallpaper src="/dians_img 1.png" alt="Example Image">
+<script>
+    let currentFontSize = localStorage.getItem('fontSize') || '16px';
+
+
+    document.body.style.fontSize = currentFontSize;
+    function increaseTextSize() {
+        let currentSize = parseInt(window.getComputedStyle(document.body).fontSize);
+        let newSize = currentSize + 2;
+        document.body.style.fontSize = newSize + 'px';
+        let buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            let currentButtonSize = parseInt(window.getComputedStyle(button).fontSize);
+            let newButtonSize = currentButtonSize + 2;
+            button.style.fontSize = newButtonSize + 'px';
+            button.style.padding = (parseInt(window.getComputedStyle(button).paddingTop) + 2) + 'px ' +
+                (parseInt(window.getComputedStyle(button).paddingRight) + 4) + 'px';
+        });
+        localStorage.setItem('fontSize', newSize + 'px');
+    }
+
+    function decreaseTextSize() {
+        let currentSize = parseInt(window.getComputedStyle(document.body).fontSize);
+        let newSize = currentSize - 2;
+        document.body.style.fontSize = newSize + 'px';
+        let buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            let currentButtonSize = parseInt(window.getComputedStyle(button).fontSize);
+            let newButtonSize = currentButtonSize - 2;
+            button.style.fontSize = newButtonSize + 'px';
+            button.style.padding = (parseInt(window.getComputedStyle(button).paddingTop) - 2) + 'px ' +
+                (parseInt(window.getComputedStyle(button).paddingRight) - 4) + 'px';
+        });
+        localStorage.setItem('fontSize', newSize + 'px');
+    }
+
+
+    let currentBrightness = 1;
+    let currentRed = 150;
+    let currentGreen = 206;
+    let currentBlue = 170;
+    function applyContrastSettings() {
+        const savedRed = localStorage.getItem('red');
+        const savedGreen = localStorage.getItem('green');
+        const savedBlue = localStorage.getItem('blue');
+        const savedBrightness = localStorage.getItem('brightness');
+
+        if (savedRed && savedGreen && savedBlue && savedBrightness) {
+            currentRed = parseInt(savedRed);
+            currentGreen = parseInt(savedGreen);
+            currentBlue = parseInt(savedBlue);
+            currentBrightness = parseFloat(savedBrightness);
+
+            document.body.style.backgroundColor = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+            document.body.style.filter = `brightness(${currentBrightness})`;
+        }
+    }applyContrastSettings();
+    function darkenWallpaper() {
+        currentBrightness = Math.max(currentBrightness - 0.1, 0.3);
+        currentRed = Math.max(currentRed - 10, 0);
+        currentGreen = Math.max(currentGreen - 10, 0);
+        currentBlue = Math.max(currentBlue - 10, 0);
+        document.body.style.filter = `brightness(${currentBrightness})`;
+        document.body.style.backgroundColor = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+
+        localStorage.setItem('red', currentRed);
+        localStorage.setItem('green', currentGreen);
+        localStorage.setItem('blue', currentBlue);
+        localStorage.setItem('brightness', currentBrightness);
+
+    }
+
+
+    function resetWallpaper() {
+        currentBrightness = 1;
+        currentRed = 150;
+        currentGreen = 206;
+        currentBlue = 170;
+        currentBrightness = 1;
+        document.body.style.filter = `brightness(${currentBrightness})`;
+        document.body.style.backgroundColor = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+
+        localStorage.setItem('red', currentRed);
+        localStorage.setItem('green', currentGreen);
+        localStorage.setItem('blue', currentBlue);
+        localStorage.setItem('brightness', currentBrightness);
+    }
+
+</script>
+</body>
+</html>

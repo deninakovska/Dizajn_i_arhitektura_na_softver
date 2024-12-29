@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Контакт</title>
+</head>
+<style>
+    body{
+        background-color: #96ceaa;
+        margin-top: 50px;
+        font-family:Roboto, sans-serif;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    h1{
+        margin-left: 500px;
+        margin-right: 0;
+    }
+    p{
+        margin-left: 150px;
+        margin-bottom: 40px;
+        background-color: whitesmoke;
+        padding: 30px;
+        border-radius: 20px;
+        width: 1100px;
+    }
+    button{
+        padding: 10px 20px;
+        margin-left: 1200px;
+        background-color: #45a06c;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 200px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), -2px -2px 4px rgba(0, 0, 0, 0.5);
+    }
+</style>
+<body>
+<a href="/api/data"><button>ПРЕТХОДНА</button></a>
+<h1><b>КОНТАКТ ИНФОРМАЦИИ</b></h1>
+<br>
+<p>
+    Ангела Јовановска<br>
+    221192<br>
+    angela.jovanovska.2@students.finki.ukim.mk
+</p>
+<p>
+    Дени Наковска<br>
+    221011<br>
+    deni.nakovska@students.finki.ukim.mk
+</p>
+<p>
+    Нина Марковска<br>
+    221022<br>
+    nina.markovska@students.finki.ukim.mk
+</p>
+<script>
+    let currentFontSize = localStorage.getItem('fontSize') || '16px';
+
+
+    document.body.style.fontSize = currentFontSize;
+    function increaseTextSize() {
+        let currentSize = parseInt(window.getComputedStyle(document.body).fontSize);
+        let newSize = currentSize + 2;
+        document.body.style.fontSize = newSize + 'px';
+        let buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            let currentButtonSize = parseInt(window.getComputedStyle(button).fontSize);
+            let newButtonSize = currentButtonSize + 2;
+            button.style.fontSize = newButtonSize + 'px';
+            button.style.padding = (parseInt(window.getComputedStyle(button).paddingTop) + 2) + 'px ' +
+                (parseInt(window.getComputedStyle(button).paddingRight) + 4) + 'px';
+        });
+        localStorage.setItem('fontSize', newSize + 'px');
+    } increaseTextSize();
+
+
+    function decreaseTextSize() {
+        let currentSize = parseInt(window.getComputedStyle(document.body).fontSize);
+        let newSize = currentSize - 2;
+        document.body.style.fontSize = newSize + 'px';
+        let buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            let currentButtonSize = parseInt(window.getComputedStyle(button).fontSize);
+            let newButtonSize = currentButtonSize - 2;
+            button.style.fontSize = newButtonSize + 'px';
+            button.style.padding = (parseInt(window.getComputedStyle(button).paddingTop) - 2) + 'px ' +
+                (parseInt(window.getComputedStyle(button).paddingRight) - 4) + 'px';
+        });
+        localStorage.setItem('fontSize', newSize + 'px');
+    } decreaseTextSize();
+
+
+    let currentBrightness = 1;
+    let currentRed = 150;
+    let currentGreen = 206;
+    let currentBlue = 170;
+    function applyContrastSettings() {
+        const savedRed = localStorage.getItem('red');
+        const savedGreen = localStorage.getItem('green');
+        const savedBlue = localStorage.getItem('blue');
+        const savedBrightness = localStorage.getItem('brightness');
+
+        if (savedRed && savedGreen && savedBlue && savedBrightness) {
+            currentRed = parseInt(savedRed);
+            currentGreen = parseInt(savedGreen);
+            currentBlue = parseInt(savedBlue);
+            currentBrightness = parseFloat(savedBrightness);
+
+
+            document.body.style.backgroundColor = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+            document.body.style.filter = `brightness(${currentBrightness})`;
+        }
+    }applyContrastSettings();
+    function darkenWallpaper() {
+        currentBrightness = Math.max(currentBrightness - 0.1, 0.3);
+        currentRed = Math.max(currentRed - 10, 0);
+        currentGreen = Math.max(currentGreen - 10, 0);
+        currentBlue = Math.max(currentBlue - 10, 0);
+        document.body.style.filter = `brightness(${currentBrightness})`;
+        document.body.style.backgroundColor = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+
+        localStorage.setItem('red', currentRed);
+        localStorage.setItem('green', currentGreen);
+        localStorage.setItem('blue', currentBlue);
+        localStorage.setItem('brightness', currentBrightness);
+
+    }
+
+
+
+</script>
+</body>
+
+</html>

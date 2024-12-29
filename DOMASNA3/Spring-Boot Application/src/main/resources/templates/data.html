@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Example</title>
+    <style>
+        body {
+            background-color: #96ceaa;
+            font-family: Roboto, sans-serif;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .form-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .form-container span {
+            font-size: 20px;
+            margin-right: 20px;
+        }
+
+        .form-container select {
+            margin-right: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #45a06c;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 200px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), -2px -2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        table {
+            width: 95%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-left: 35px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid black;
+            height: 13px;
+        }
+
+        th {
+            background-color: #45a06c;
+            color: white;
+        }
+
+        td {
+            background-color: #c5dfd0;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #c5dfd0;
+        }
+        span{
+            margin-left: 50px;
+            margin-bottom: 0;}
+        a{
+            margin-left: 1200px;
+        }
+    </style>
+</head>
+<body>
+<a href="/api/contact"><button>КОНТАКТ</button></a>
+<br>
+<div class="form-container">
+    <span><b>Избери шифра:</b></span>
+    <form method="get" action="/api/data">
+        <select name="id">
+            <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.companyCode}" th:selected="${company.id == companyId}"></option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<br>
+<span>Најнови податоци:</span>
+<table>
+    <thead>
+    <tr>
+        <th>Датум</th>
+        <th>Цена на последна трансакција</th>
+        <th>Макс.</th>
+        <th>Мин.</th>
+        <th>Просечна цена</th>
+        <th>%пром.</th>
+        <th>Количина</th>
+        <th>Вкупен промет во денари</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="d : ${data}">
+        <td th:text="${d.date}"></td>
+        <td th:text="${d.lastTransactionPrice}"></td>
+        <td th:text="${d.maxPrice}"></td>
+        <td th:text="${d.minPrice}"></td>
+        <td th:text="${d.averagePrice}"></td>
+        <td th:text="${d.percentageChange}"></td>
+        <td th:text="${d.quantity}"></td>
+        <td th:text="${d.totalTurnover}"></td>
+    </tr>
+    </tbody>
+</table>
+<script>
+
+    let currentFontSize = localStorage.getItem('fontSize') || '16px';
+
+    document.body.style.fontSize = currentFontSize;
+    function increaseTextSize() {
+        let currentSize = parseInt(window.getComputedStyle(document.body).fontSize);
+        let newSize = currentSize + 2;
+        document.body.style.fontSize = newSize + 'px';
+        let buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            let currentButtonSize = parseInt(window.getComputedStyle(button).fontSize);
+            let newButtonSize = currentButtonSize + 2;
+            button.style.fontSize = newButtonSize + 'px';
+            button.style.padding = (parseInt(window.getComputedStyle(button).paddingTop) + 2) + 'px ' +
+                (parseInt(window.getComputedStyle(button).paddingRight) + 4) + 'px';
+        });
+        localStorage.setItem('fontSize', newSize + 'px');
+    } increaseTextSize();
+
+    function decreaseTextSize() {
+        let currentSize = parseInt(window.getComputedStyle(document.body).fontSize);
+        let newSize = currentSize - 2;
+        document.body.style.fontSize = newSize + 'px';
+        let buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            let currentButtonSize = parseInt(window.getComputedStyle(button).fontSize);
+            let newButtonSize = currentButtonSize - 2;
+            button.style.fontSize = newButtonSize + 'px';
+            button.style.padding = (parseInt(window.getComputedStyle(button).paddingTop) - 2) + 'px ' +
+                (parseInt(window.getComputedStyle(button).paddingRight) - 4) + 'px';
+        });
+        localStorage.setItem('fontSize', newSize + 'px');
+    } decreaseTextSize();
+
+
+    let currentBrightness = 1;
+    let currentRed = 150;
+    let currentGreen = 206;
+    let currentBlue = 170;
+    function applyContrastSettings() {
+        const savedRed = localStorage.getItem('red');
+        const savedGreen = localStorage.getItem('green');
+        const savedBlue = localStorage.getItem('blue');
+        const savedBrightness = localStorage.getItem('brightness');
+
+        if (savedRed && savedGreen && savedBlue && savedBrightness) {
+            currentRed = parseInt(savedRed);
+            currentGreen = parseInt(savedGreen);
+            currentBlue = parseInt(savedBlue);
+            currentBrightness = parseFloat(savedBrightness);
+
+            document.body.style.backgroundColor = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+            document.body.style.table = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+
+            document.body.style.filter = `brightness(${currentBrightness})`;
+        }
+    }applyContrastSettings();
+    function darkenWallpaper() {
+        currentBrightness = Math.max(currentBrightness - 0.1, 0.3);
+        currentRed = Math.max(currentRed - 10, 0);
+        currentGreen = Math.max(currentGreen - 10, 0);
+        currentBlue = Math.max(currentBlue - 10, 0);
+        document.body.style.filter = `brightness(${currentBrightness})`;
+        document.body.style.backgroundColor = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+        document.body.style.table = `rgb(${currentRed}, ${currentGreen}, ${currentBlue})`;
+
+        localStorage.setItem('red', currentRed);
+        localStorage.setItem('green', currentGreen);
+        localStorage.setItem('blue', currentBlue);
+        localStorage.setItem('brightness', currentBrightness);
+
+    }
+
+
+
+</script>
+</body>
+
+</html>
